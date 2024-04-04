@@ -1,17 +1,17 @@
-import cv2
-import numpy as np
+from face_recognition import face_encodings as encode_face, face_locations as get_face_locations, compare_faces, face_distance
+from numpy import ascontiguousarray, argmin
 from json import load
-from face_recognition import face_encodings as encode_face, load_image_file, face_locations as get_face_locations, compare_faces, face_distance
+import cv2
 
 known_face_encodings = []
 known_face_names = []
 
-f = open("data-1.json")
+f = open("encoded.json")
 data = load(f)
 for e in data:
-  enc = encode_face(load_image_file(f"images/{e['img']}"))
-  known_face_encodings.append(enc[0])
-  known_face_names.append(e["name"])
+  for encoding in e["encodings"]:
+    known_face_encodings.append(encoding)
+    known_face_names.append(e["name"])
 f.close()
 
 face_locations = []
@@ -27,7 +27,7 @@ while True:
 
   if process_this_frame:
     small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-    rgb_small_frame = np.ascontiguousarray(small_frame[:, :, ::-1])
+    rgb_small_frame = ascontiguousarray(small_frame[:, :, ::-1])
       
     face_locations = get_face_locations(rgb_small_frame)
     face_encodings = encode_face(rgb_small_frame, face_locations)
@@ -36,7 +36,7 @@ while True:
       matches = compare_faces(known_face_encodings, face_encoding)
       name = "Unknown"
       face_distances = face_distance(known_face_encodings, face_encoding)
-      best_match_index = np.argmin(face_distances)
+      best_match_index = argmin(face_distances)
       if matches[best_match_index]:
         name = known_face_names[best_match_index]
       face_names.append(name)
