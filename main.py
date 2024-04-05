@@ -3,16 +3,22 @@ from numpy import ascontiguousarray, argmin
 from json import load
 import cv2
 
-known_face_encodings = []
-known_face_names = []
-
-f = open("encoded.json")
+f = open("data/encoded.json")
 data = load(f)
-for e in data:
-  for encoding in e["encodings"]:
-    known_face_encodings.append(encoding)
-    known_face_names.append(e["name"])
 f.close()
+
+def get_face_data():
+  known_face_encodings = []
+  known_face_ids = []
+
+  for e in data:
+    for encoding in e["encodings"]:
+      known_face_encodings.append(encoding)
+      known_face_ids.append(e["id"])
+
+  return [known_face_encodings, known_face_ids]
+
+known_face_encodings, known_face_ids = get_face_data()
 
 face_locations = []
 face_encodings = []
@@ -38,7 +44,8 @@ while True:
       face_distances = face_distance(known_face_encodings, face_encoding)
       best_match_index = argmin(face_distances)
       if matches[best_match_index]:
-        name = known_face_names[best_match_index]
+        id = known_face_ids[best_match_index]
+        name = list(filter(lambda e: e["id"] == id, data))[0]["name"]
       face_names.append(name)
 
   process_this_frame = not process_this_frame
