@@ -1,13 +1,17 @@
 const video = document.querySelector("video")
 const socket = io()
-let videoId = null
+let imageId = null
 
-socket.on("connect", () => socket.emit("get-video-id"))
+socket.on("connect", () => socket.emit("get-image-id"))
 
-window.addEventListener("beforeunload", () => socket.emit("disconnect-client", videoId))
+window.addEventListener("beforeunload", () => socket.emit("disconnect-client", imageId))
 
-socket.on("video-id", id => {
-  videoId = id
+socket.on("image-id", id => {
+  imageId = id
+})
+
+socket.on("face-result", name => {
+  document.querySelector("p").innerText = name
 })
 
 function captureFrame() {
@@ -16,7 +20,7 @@ function captureFrame() {
   canvas.width = video.videoWidth
   canvas.height = video.videoHeight
   context.drawImage(video, 0, 0, canvas.width, canvas.height)
-  const imgData = canvas.toDataURL("image/jpeg", 0.8)
+  const imgData = canvas.toDataURL("image/jpeg")
   return imgData
 }
 
@@ -27,7 +31,6 @@ navigator.mediaDevices.getUserMedia({
   videoTracks = stream.getVideoTracks()
   video.srcObject = stream
   setInterval(() => {
-    socket.emit("frame", {videoId, frame: captureFrame()})
-  }, 33)  
+    socket.emit("frame", {imageId, frame: captureFrame()})
+  }, 250)  
 })
-

@@ -4,3 +4,4 @@ images/
 test.js
 SSL/
 tmp/
+__pycache__
