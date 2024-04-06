@@ -4,6 +4,8 @@ let videoId = null
 
 socket.on("connect", () => socket.emit("get-video-id"))
 
+window.addEventListener("beforeunload", () => socket.emit("disconnect-client", videoId))
+
 socket.on("video-id", id => {
   videoId = id
 })
@@ -26,6 +28,6 @@ navigator.mediaDevices.getUserMedia({
   video.srcObject = stream
   setInterval(() => {
     socket.emit("frame", {videoId, frame: captureFrame()})
-  }, 4000)  
+  }, 33)  
 })
 
