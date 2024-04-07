@@ -20,7 +20,7 @@ function captureFrame() {
   canvas.width = video.videoWidth
   canvas.height = video.videoHeight
   context.drawImage(video, 0, 0, canvas.width, canvas.height)
-  const imgData = canvas.toDataURL("image/jpeg")
+  const imgData = canvas.toDataURL("image/jpeg", 1)
   return imgData
 }
 
@@ -31,6 +31,6 @@ navigator.mediaDevices.getUserMedia({
   videoTracks = stream.getVideoTracks()
   video.srcObject = stream
   setInterval(() => {
-    socket.emit("frame", {imageId, frame: captureFrame()})
-  }, 250)  
+    if (socket.connected) socket.emit("frame", {imageId, frame: captureFrame()})
+  }, 50)  
 })
