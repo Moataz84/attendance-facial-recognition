@@ -1,13 +1,17 @@
 const video = document.querySelector("video")
 const socket = io()
-let imageId = null
+let imageId = interval = null
+let connected = false
 
-socket.on("connect", () => socket.emit("get-image-id"))
+socket.on("connect", () => {
+  imageId = socket.id
+  connected = true
+})
 
-window.addEventListener("beforeunload", () => socket.emit("disconnect-client", imageId))
-
-socket.on("image-id", id => {
-  imageId = id
+window.addEventListener("beforeunload", () => {
+  connected = false
+  clearInterval(interval)
+  socket.emit("disconnect-client", imageId)
 })
 
 socket.on("face-result", name => {
@@ -30,7 +34,7 @@ navigator.mediaDevices.getUserMedia({
 }).then(async stream => {
   videoTracks = stream.getVideoTracks()
   video.srcObject = stream
-  setInterval(() => {
-    if (socket.connected) socket.emit("frame", {imageId, frame: captureFrame()})
-  }, 50)  
+  interval = setInterval(() => {
+    if (connected) socket.emit("frame", {imageId, frame: captureFrame()})
+  }, 50)
 })

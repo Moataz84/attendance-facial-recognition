@@ -1,21 +1,15 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit, disconnect
 from os.path import abspath
-from uuid import uuid4
 from base64 import b64decode
 from os import remove
-from main import get_face_result
+from compare import get_face_result
 
 app = Flask(__name__, template_folder=abspath("./views"), static_folder="public")
-socketio = SocketIO(app)   
+socketio = SocketIO(app)
 @app.get("/")
 def index():
   return render_template("index.html")
-
-@socketio.on("get-image-id")
-def get_image_id():
-  image_id  = str(uuid4())
-  emit("image-id", image_id)
 
 @socketio.on("disconnect-client")
 def disconnect_client(image_id):
@@ -26,7 +20,7 @@ def disconnect_client(image_id):
     return
 
 @socketio.on("frame")
-def receive_frames(data):
+def receive_frame(data):
   frame = data["frame"]
   image_id = data["imageId"]
   _, file_data = frame.split(",", 1)

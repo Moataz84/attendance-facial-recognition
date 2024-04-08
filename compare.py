@@ -21,6 +21,8 @@ def get_face_result(img_path):
   name = "Unknown"
   try:
     query_image = face_encodings(load_image_file(img_path))
+    if len(query_image) == 0:
+      return "No face detected"
     query_image_encoding = query_image[0]
     result_array = compare_faces(known_face_encodings, query_image_encoding, tolerance=0.4)
     result = result_array.index(True)
