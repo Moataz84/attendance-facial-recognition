@@ -13,9 +13,6 @@ window.addEventListener("beforeunload", () => {
   connected = false
   disconnecting = true
   socket.emit("disconnect-client", imageId)
-  for (let i = 0; i < 100000; i++) {
-    console.log("Disconnecting")
-  }
 })
 
 socket.on("face-result", name => {
