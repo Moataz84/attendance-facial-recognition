@@ -6,7 +6,8 @@ from os import remove
 from compare import get_face_result
 
 app = Flask(__name__, template_folder=abspath("./views"), static_folder="public")
-socketio = SocketIO(app)
+socketio = SocketIO(app, logger=True)
+
 @app.get("/")
 def index():
   return render_template("index.html")
