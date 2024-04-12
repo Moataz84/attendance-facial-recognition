@@ -18,7 +18,11 @@ def get_face_data():
 
 def append_face_data(id, encoding, data):
   new_encodings = list(
-    map(lambda e: e if e["id"] != id else {"id": e["id"], "name": e["name"], "encodings": e["encodings"] +[encoding.tolist()]}, data)
+    map(lambda e:
+        {"id": e["id"], "name": e["name"], "encodings": e["encodings"] +[encoding.tolist()]} if e["id"] == id and len(e["encodings"]) <= 200 
+        else e,
+      data
+    )
   )
 
   with open("data/encoded.json", "w") as file:
@@ -36,9 +40,8 @@ def get_face_result(img_path):
     result_array = compare_faces(known_face_encodings, query_image_encoding, tolerance=0.4)
     result = result_array.index(True)
     person_id = known_face_ids[result]
-    #append_face_data(person_id, query_image_encoding, data)
+    append_face_data(person_id, query_image_encoding, data)
     name = list(filter(lambda e: e["id"] == person_id, data))[0]["name"]
     return [person_id, name]
-  except Exception as e:
-    print(e)
+  except:
     return [person_id, "Unknown person"]

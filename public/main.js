@@ -18,7 +18,7 @@ window.addEventListener("beforeunload", () => {
 })
 
 socket.on("face-result", data => {
-  /*connected = true
+  connected = true
   const { id, name } = data
   if (!id) p.innerText = name
   if (ids[ids.length - 1]=== id || ids.length === 0) {
@@ -28,17 +28,15 @@ socket.on("face-result", data => {
       socket.emit("check-present", id)
     }
   }
-  if (!id) ids = []*/
-  connected = true
-  p.innerText = data.name
+  if (!id) ids = []
 })
 
 socket.on("present", person => {
   p.innerText = `${person.name} is present`
-  /*clearInterval(interval)
+  clearInterval(interval)
   setTimeout(() => {
     interval = setInterval(sendFrame, 50)
-  }, 7000)*/
+  }, 7000)
 })
 
 function captureFrame() {
