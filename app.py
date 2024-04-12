@@ -3,7 +3,7 @@ from flask_socketio import SocketIO, emit, disconnect
 from base64 import b64decode
 from os.path import abspath
 from os import remove
-from json import load
+from json import load, dump
 from compare import get_face_result
 
 app = Flask(__name__, template_folder=abspath("./views"), static_folder="public")
@@ -36,11 +36,14 @@ def disconnect_client(image_id):
 def mark_present(id):
   f = open("data/present.json")
   data = load(f)
-  f.close()
   person = list(filter(lambda e: e["id"] == id, data))[0]
   if not person["present"]:
-    emit("present", person)
+    present = list(map(lambda e: e if not e["id"] == id else {"id": e["id"], "name": e["name"], "present": True}, data))
+    with open("data/present.json", "w") as file:
+      dump(present, file, indent=2)
+      file.close() 
+    emit("mark-present", person)
+  f.close()
   
-
 if __name__ == "__main__":
   socketio.run(app, debug=True, host="0.0.0.0", port=5001, ssl_context=("SSL/cert.pem", "SSL/key.pem"))
