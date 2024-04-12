@@ -1,8 +1,10 @@
 const video = document.querySelector("video")
+const p = document.querySelector("p")
 const socket = io()
 let imageId = interval = null
 let connected = false
 let disconnecting = false
+let ids = []
 
 socket.on("connect", () => {
   imageId = socket.id
@@ -10,14 +12,33 @@ socket.on("connect", () => {
 })
 
 window.addEventListener("beforeunload", () => {
-  connected = false
   disconnecting = true
+  connected = false
   socket.emit("disconnect-client", imageId)
 })
 
-socket.on("face-result", name => {
+socket.on("face-result", data => {
+  /*connected = true
+  const { id, name } = data
+  if (!id) p.innerText = name
+  if (ids[ids.length - 1]=== id || ids.length === 0) {
+    ids.push(id)
+    if (ids.length === 5) {
+      ids = []
+      socket.emit("check-present", id)
+    }
+  }
+  if (!id) ids = []*/
   connected = true
-  document.querySelector("p").innerText = name
+  p.innerText = data.name
+})
+
+socket.on("present", person => {
+  p.innerText = `${person.name} is present`
+  /*clearInterval(interval)
+  setTimeout(() => {
+    interval = setInterval(sendFrame, 50)
+  }, 7000)*/
 })
 
 function captureFrame() {
@@ -30,15 +51,17 @@ function captureFrame() {
   return imgData
 }
 
+function sendFrame() {
+  if (disconnecting) clearInterval(interval)
+  if (connected && !disconnecting) socket.emit("frame", {imageId, frame: captureFrame()})
+  connected = false
+}
+
 navigator.mediaDevices.getUserMedia({
   audio: false, 
   video: true
 }).then(async stream => {
   videoTracks = stream.getVideoTracks()
   video.srcObject = stream
-  interval = setInterval(() => {
-    if (disconnecting) clearInterval(interval)
-    if (connected && !disconnecting) socket.emit("frame", {imageId, frame: captureFrame()})
-    connected = false
-  }, 50)
+  interval = setInterval(sendFrame, 50)
 })

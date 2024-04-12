@@ -15,7 +15,7 @@ def encode_data():
     for img in imgs:
       encoding = face_encodings(load_image_file(f"images/{img}"))[0].tolist()
       encodings.append(encoding)
-    encoded.append({"id": id, "name": name, "imgs": imgs, "encodings": encodings})
+    encoded.append({"id": id, "name": name, "encodings": encodings})
  
   f.close()
 
