@@ -9,9 +9,17 @@ from compare import get_face_result
 app = Flask(__name__, template_folder=abspath("./views"), static_folder="public")
 socketio = SocketIO(app)#, logger=True)
 
+@app.get("/read")
+def reader():
+  return render_template("reader.html")
+
 @app.get("/")
 def index():
-  return render_template("index.html")
+  f = open("data/present.json")
+  data = load(f)
+  f.close()
+  present = list(filter(lambda e: e["present"], data))
+  return render_template("index.html", present=present)
 
 @socketio.on("frame")
 def receive_frame(data):
@@ -38,7 +46,9 @@ def mark_present(id):
   data = load(f)
   person = list(filter(lambda e: e["id"] == id, data))[0]
   if not person["present"]:
-    present = list(map(lambda e: e if not e["id"] == id else {"id": e["id"], "name": e["name"], "present": True}, data))
+    present = list(map(lambda e: e 
+      if not e["id"] == id 
+      else {"id": e["id"], "name": e["name"], "profile": e["profile"], "present": True}, data))
     with open("data/present.json", "w") as file:
       dump(present, file, indent=2)
       file.close() 

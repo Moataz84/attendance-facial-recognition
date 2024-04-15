@@ -3,12 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" defer></script>
-  <script src="public/main.js" defer></script>
-  <title>Home</title>
+  <title>Dashboard</title>
 </head>
 <body>
-  <video autoplay playsinline></video>
-  <p></p>
+  <div class="present">
+    {% for person in present %}
+    <div class="person">
+      <img src="public/imgs/{{person.profile}}">
+      <p>{{ person.name }}</p>
+    </div>
+    {% endfor %}
+  </div>
 </body>
 </html>
