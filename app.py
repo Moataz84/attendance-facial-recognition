@@ -46,13 +46,15 @@ def mark_present(id):
   data = load(f)
   person = list(filter(lambda e: e["id"] == id, data))[0]
   if not person["present"]:
-    present = list(map(lambda e: e 
+    """present = list(map(lambda e: e 
       if not e["id"] == id 
-      else {"id": e["id"], "name": e["name"], "profile": e["profile"], "present": True}, data))
+      else {"id": e["id"], "name": e["name"], "profile": e["profile"], "present": True}, data)
+    )
     with open("data/present.json", "w") as file:
       dump(present, file, indent=2)
-      file.close() 
+      file.close()"""
     emit("mark-present", person)
+    socketio.emit("show-person", person)
   f.close()
   
 if __name__ == "__main__":

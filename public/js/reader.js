@@ -1,6 +1,5 @@
 const video = document.querySelector("video")
 const p = document.querySelector("p")
-const socket = io()
 let imageId = interval = null
 let connected = false
 let disconnecting = false
