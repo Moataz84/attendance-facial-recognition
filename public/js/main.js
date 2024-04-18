@@ -1,6 +1,8 @@
 const socket = io()
 
-socket.on("show-person", person => {
+socket.on("show-person", data => {
+  const { person, signed_time } = data
+  //console.log(signed_time)
   document.querySelector(".present").insertAdjacentHTML(
     "beforeend",
     `<div class="person" data-id="${person.id}">

@@ -5,9 +5,24 @@ from os.path import abspath
 from os import remove
 from json import load, dump
 from compare import get_face_result
+from time import time
+from datetime import datetime
 
 app = Flask(__name__, template_folder=abspath("./views"), static_folder="public")
 socketio = SocketIO(app)#, logger=True)
+
+def format_entry(person):
+  if not person["present"]:
+    return person
+  signed_time = datetime.fromtimestamp(person["time"]).strftime("%H:%M %p")  
+
+  return {
+    "id": person["id"], 
+    "name": person["name"], 
+    "profile": person["profile"], 
+    "present": True, 
+    "time": signed_time
+  }
 
 @app.get("/read")
 def reader():
@@ -16,10 +31,10 @@ def reader():
 @app.get("/")
 def index():
   f = open("data/present.json")
-  data = load(f)
+  result = load(f)
+  data = list(map(format_entry, result))
   f.close()
-  present = list(filter(lambda e: e["present"], data))
-  return render_template("index.html", present=present)
+  return render_template("index.html", data=data)
 
 @socketio.on("frame")
 def receive_frame(data):
@@ -46,15 +61,16 @@ def mark_present(id):
   data = load(f)
   person = list(filter(lambda e: e["id"] == id, data))[0]
   if not person["present"]:
+    signed_time = time()
     present = list(map(lambda e: e 
       if not e["id"] == id 
-      else {"id": e["id"], "name": e["name"], "profile": e["profile"], "present": True}, data)
+      else {"id": e["id"], "name": e["name"], "profile": e["profile"], "present": True, "time": signed_time}, data)
     )
     with open("data/present.json", "w") as file:
       dump(present, file, indent=2)
       file.close()
     emit("mark-present", person)
-    socketio.emit("show-person", person)
+    socketio.emit("show-person", {"person": person, "signed_time": signed_time})
   f.close()
   
 @socketio.on("signout")
@@ -63,7 +79,7 @@ def signout(id):
   data = load(f)
   present = list(map(lambda e: e 
     if not e["id"] == id 
-    else {"id": e["id"], "name": e["name"], "profile": e["profile"], "present": False}, data)
+    else {"id": e["id"], "name": e["name"], "profile": e["profile"], "present": False, "time": None}, data)
   )
   with open("data/present.json", "w") as file:
     dump(present, file, indent=2)
@@ -71,4 +87,4 @@ def signout(id):
   f.close()
 
 if __name__ == "__main__":
-  socketio.run(app, debug=True, host="0.0.0.0", port=5001)#, ssl_context=("SSL/cert.pem", "SSL/key.pem"))
+  socketio.run(app, debug=True, host="0.0.0.0", port=5001, ssl_context=("SSL/cert.pem", "SSL/key.pem"))

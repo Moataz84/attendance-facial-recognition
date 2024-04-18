@@ -60,9 +60,25 @@ nav a {
 
 .person {
   width: 130px;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
 }
 
 .person img {
   width: 100%;
+}
+
+.person button {
+  border: 0;
+  border-radius: 3px;
+  background-color: #1a73e8;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 0;
+}
+
+.person button:hover {
+  background-color: #075cca;
 }

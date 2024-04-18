@@ -13,11 +13,14 @@
     {% include "partials/menu.html" %}
     <div class="content">
       <div class="present">
-        {% for person in present %}
+        {% for person in data %}
         <div class="person" data-id="{{person.id}}">
           <img src="public/imgs/{{person.profile}}">
           <p>{{ person.name }}</p>
-          <button onclick="signout(event)">Sign Out</button>
+          {% if person.time %}
+            <p>Present at: {{ person.time }}</p>
+            <button onclick="signout(event)">Sign Out</button>
+          {% endif %}
         </div>
         {% endfor %}
       </div>
