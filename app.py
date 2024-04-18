@@ -46,16 +46,29 @@ def mark_present(id):
   data = load(f)
   person = list(filter(lambda e: e["id"] == id, data))[0]
   if not person["present"]:
-    """present = list(map(lambda e: e 
+    present = list(map(lambda e: e 
       if not e["id"] == id 
       else {"id": e["id"], "name": e["name"], "profile": e["profile"], "present": True}, data)
     )
     with open("data/present.json", "w") as file:
       dump(present, file, indent=2)
-      file.close()"""
+      file.close()
     emit("mark-present", person)
     socketio.emit("show-person", person)
   f.close()
   
+@socketio.on("signout")
+def signout(id):
+  f = open("data/present.json")
+  data = load(f)
+  present = list(map(lambda e: e 
+    if not e["id"] == id 
+    else {"id": e["id"], "name": e["name"], "profile": e["profile"], "present": False}, data)
+  )
+  with open("data/present.json", "w") as file:
+    dump(present, file, indent=2)
+    file.close()
+  f.close()
+
 if __name__ == "__main__":
-  socketio.run(app, debug=True, host="0.0.0.0", port=5001, ssl_context=("SSL/cert.pem", "SSL/key.pem"))
+  socketio.run(app, debug=True, host="0.0.0.0", port=5001)#, ssl_context=("SSL/cert.pem", "SSL/key.pem"))

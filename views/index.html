@@ -3,18 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="public/style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" defer></script>
   <script src="public/js/main.js" defer></script>
   <title>Dashboard</title>
 </head>
 <body>
-  <div class="present">
-    {% for person in present %}
-    <div class="person">
-      <img src="public/imgs/{{person.profile}}">
-      <p>{{ person.name }}</p>
+  <div class="container">
+    {% include "partials/menu.html" %}
+    <div class="content">
+      <div class="present">
+        {% for person in present %}
+        <div class="person" data-id="{{person.id}}">
+          <img src="public/imgs/{{person.profile}}">
+          <p>{{ person.name }}</p>
+          <button onclick="signout(event)">Sign Out</button>
+        </div>
+        {% endfor %}
+      </div>
     </div>
-    {% endfor %}
   </div>
 </body>
 </html>
