@@ -70,7 +70,7 @@ def mark_present(id):
       dump(present, file, indent=2)
       file.close()
     emit("mark-present", person)
-    socketio.emit("show-person", {"person": person, "signed_time": signed_time})
+    socketio.emit("show-person", person["id"])
   f.close()
   
 @socketio.on("signout")
@@ -87,4 +87,4 @@ def signout(id):
   f.close()
 
 if __name__ == "__main__":
-  socketio.run(app, debug=True, host="0.0.0.0", port=5001, ssl_context=("SSL/cert.pem", "SSL/key.pem"))
+  socketio.run(app, debug=True, host="0.0.0.0", port=5001)#, ssl_context=("SSL/cert.pem", "SSL/key.pem"))

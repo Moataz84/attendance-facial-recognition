@@ -15,11 +15,18 @@
       <div class="present">
         {% for person in data %}
         <div class="person" data-id="{{person.id}}">
+        {% if not person.present %}
+        <div class="cover"></div>
+        {% else %}
+        <div class="cover hidden"></div>
+        {% endif %}
           <img src="public/imgs/{{person.profile}}">
           <p>{{ person.name }}</p>
-          {% if person.time %}
-            <p>Present at: {{ person.time }}</p>
+          {% if person.present %}
             <button onclick="signout(event)">Sign Out</button>
+            <p class="time">Present at: {{ person.time }}</p>
+          {% else %}
+            <button onclick="signin(event)">Sign In</button>
           {% endif %}
         </div>
         {% endfor %}
