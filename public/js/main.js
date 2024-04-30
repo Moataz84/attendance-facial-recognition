@@ -1,16 +1,5 @@
 const socket = io()
 
-socket.on("show-person", id => {
-  const person = document.querySelector(`[data-id="${id}"]`)
-  person.insertAdjacentHTML(
-    "beforeend", `<p class="time">Present at: ${new Date().toLocaleTimeString([], {timeStyle: "short"})}</p>`
-  )
-  person.querySelector(".cover").classList.add("hidden")
-  const btn = person.querySelector("button")
-  btn.textContent = "Sign Out"
-  btn.setAttribute("onclick", "signout(event)")
-})
-
 function signout(e) {
   e.preventDefault()
   const person = e.target.parentElement

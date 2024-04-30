@@ -87,4 +87,4 @@ def signout(id):
   f.close()
 
 if __name__ == "__main__":
-  socketio.run(app, debug=True, host="0.0.0.0", port=5001)#, ssl_context=("SSL/cert.pem", "SSL/key.pem"))
+  socketio.run(app, debug=True, host="0.0.0.0", port=5001, ssl_context=("SSL/cert.pem", "SSL/key.pem"))

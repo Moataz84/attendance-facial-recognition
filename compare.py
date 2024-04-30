@@ -19,7 +19,11 @@ def get_face_data():
 def append_face_data(id, encoding, data):
   new_encodings = list(
     map(lambda e:
-        {"id": e["id"], "name": e["name"], "encodings": e["encodings"] +[encoding.tolist()]} if e["id"] == id and len(e["encodings"]) <= 200 
+        {
+          "id": e["id"], 
+          "name": e["name"], 
+          "encodings": e["encodings"] + [encoding.tolist()]
+        } if e["id"] == id and len(e["encodings"]) <= 200 
         else e,
       data
     )
