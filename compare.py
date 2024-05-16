@@ -16,19 +16,23 @@ def get_face_data():
 
   return [known_face_encodings, known_face_ids, data]
 
-def append_face_data(id, encoding, data):
-  new_encodings = list(
-    map(lambda e:
-        {
-          "id": e["id"], 
-          "name": e["name"], 
-          "encodings": e["encodings"] + [encoding.tolist()]
-        } if e["id"] == id and len(e["encodings"]) <= 200 
-        else e,
-      data
-    )
-  )
+def append_encoding(e, id, encoding):
+  if e["id"] == id:
+    if len(e["encodings"]) <= 200:
+      return {
+        "id": e["id"], 
+        "name": e["name"], 
+        "encodings": e["encodings"] + [encoding.tolist()]
+      }
+    return {
+      "id": e["id"], 
+      "name": e["name"], 
+      "encodings": e["encodings"][1:] + [encoding.tolist()]
+    }
+  return e
 
+def append_face_data(id, encoding, data):
+  new_encodings = list(map(lambda e: append_encoding(e, id, encoding), data))
   with open("data/encoded.json", "w") as file:
     dump(new_encodings, file, indent=2)
     file.close() 
