@@ -7,12 +7,31 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" defer></script>
   <script src="public/js/main.js" defer></script>
   <script src="public/js/reader.js" defer></script>
-  <title>Video Feed</title>
+
+  <title>Reader</title>
 </head>
 <body>
-  <div class="video-reader">
-    <video autoplay playsinline></video>
-    <p></p>
+  <div class="container">
+    {% include "partials/menu.html" %}
+    <div class="content reader">
+      <div class="present">
+        {% for person in data %}
+        <div class="person" data-id="{{person.id}}">
+        {% if not person.present %}
+        <div class="cover"></div>
+        {% else %}
+        <div class="cover hidden"></div>
+        {% endif %}
+          <img src="public/imgs/{{person.profile}}">
+          <p>{{ person.name }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="video-reader">
+        <video autoplay playsinline></video>
+        <p></p>
+      </div>
+    </div>
   </div>
 </body>
 </html>

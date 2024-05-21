@@ -1,13 +1,14 @@
 const socket = io()
 
 socket.on("show-person", id => {
-  if (window.location.pathname !== "/") return
   const person = document.querySelector(`[data-id="${id}"]`)
+  person.querySelector(".cover").classList.add("hidden")
+
+  const btn = person.querySelector("button")
+  if (!btn) return
   person.insertAdjacentHTML(
     "beforeend", `<p class="time">Present at: ${new Date().toLocaleTimeString([], {timeStyle: "short"})}</p>`
   )
-  person.querySelector(".cover").classList.add("hidden")
-  const btn = person.querySelector("button")
   btn.textContent = "Sign Out"
   btn.setAttribute("onclick", "signout(event)")
 })
@@ -30,3 +31,8 @@ function signin(e) {
   const id = person.getAttribute("data-id")
   socket.emit("check-present", id)
 }
+
+socket.on("signedout", id => {
+  const person = document.querySelector(`[data-id="${id}"]`)
+  person.querySelector(".cover").classList.remove("hidden")
+})

@@ -26,7 +26,11 @@ def format_entry(person):
 
 @app.get("/read")
 def reader():
-  return render_template("reader.html")
+  f = open("data/present.json")
+  result = load(f)
+  data = list(map(format_entry, result))
+  f.close()
+  return render_template("reader.html", data=data)
 
 @app.get("/")
 def index():
@@ -77,6 +81,7 @@ def mark_present(id):
 def signout(id):
   f = open("data/present.json")
   data = load(f)
+  socketio.emit("signedout", id)
   present = list(map(lambda e: e 
     if not e["id"] == id 
     else {"id": e["id"], "name": e["name"], "profile": e["profile"], "present": False, "time": None}, data)

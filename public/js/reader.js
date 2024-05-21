@@ -1,5 +1,5 @@
 const video = document.querySelector("video")
-const p = document.querySelector("p")
+const p = document.querySelector(".video-reader p")
 let imageId = interval = null
 let connected = false
 let disconnecting = false

@@ -37,6 +37,7 @@ nav a {
 }
 
 .video-reader {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,12 +45,8 @@ nav a {
 }
 
 .video-reader video {
-  height: 90vh;
+  max-width: 100%;
   transform: scaleX(-1);
-}
-
-.video-reader p {
-  font-weight: 600;
 }
 
 .present {
@@ -95,4 +92,22 @@ nav a {
 
 .person button:hover {
   background-color: #075cca;
+}
+
+.reader {
+  display: flex;
+  gap: 15px;
+}
+
+.reader .present {
+  width: 70%;
+  gap: 15px;
+}
+
+.reader .person {
+  width: 70px;
+}
+
+.reader .person .cover {
+  height: 105px;
 }
