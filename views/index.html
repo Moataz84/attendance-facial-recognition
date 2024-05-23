@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="public/style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" defer></script>
-  <script src="public/js/main.js" defer></script>
   <title>Dashboard</title>
 </head>
 <body>
@@ -30,8 +28,13 @@
           {% endif %}
         </div>
         {% endfor %}
+        <div class="actions">
+          <button onclick="signAllOut()">Sign All Out</button>
+        </div>
       </div>
     </div>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
+  <script src="public/js/main.js"></script>
 </body>
 </html>

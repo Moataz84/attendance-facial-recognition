@@ -80,7 +80,7 @@ nav a {
   width: 100%;
 }
 
-.person button {
+.person button, .actions button {
   border: 0;
   border-radius: 3px;
   background-color: #1a73e8;
@@ -90,8 +90,19 @@ nav a {
   padding: 6px 0;
 }
 
-.person button:hover {
+.person button:hover, .actions button:hover {
   background-color: #075cca;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.actions button {
+  padding: 6px 30px;
 }
 
 .reader {
