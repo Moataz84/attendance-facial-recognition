@@ -23,16 +23,17 @@ To run this project:
 2. Create a new Python environment using `python -m venv <name-of-your-environment>`.
 3. Activate your environment then run `pip install -r requirements.txt`.
 4. Create a folder named `SSL` and run the command `openssl req -x509 -newkey rsa:4096 -nodes -out ssl/cert.pem -keyout ssl/key.pem -days 365` to create a self-signed certificate.
-5. Create a `public/imgs` folder and add all of your images to it.
-6. Create a `data/encoded.json` file, a `data/list.json` file and a `data/present.json` file.
-7. Create a list in `list.json` and for each person add:
+5. Create a `tmp` folder to store temporary images.
+6. Create a `public/imgs` folder and add all of your images to it.
+7. Create a `data/encoded.json` file, a `data/list.json` file and a `data/present.json` file.
+8. Create a list in `list.json` and for each person add:
 - `id`: An id for the person
 - `name`: The person's name
-- `profile`: The file path to the person's profile picture
-- `imgs`: Array containing all of the names of the images for that person.
-8. Run the `encode.py` to create a list of people with encoded images.
-9. Copy the contents of `list.json` to `present.json` and replace the `imgs` property with the `present` property and set it to `false`.
-10. Run the app using `python app.py`.
+- `profile`: The file name of the person's profile picture
+- `imgs`: Array containing all of the filenames of images for that person.
+9. Run the `encode.py` to create a list of people with encoded images.
+10. Copy the contents of `list.json` to `present.json` and replace the `imgs` property with the `present` property and set it to `false`. Add a `time` property to the `list.json` file and set it to `null`.
+11. Run the app using `python app.py`.
 
 ## License
 
