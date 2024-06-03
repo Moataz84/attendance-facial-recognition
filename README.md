@@ -10,7 +10,7 @@ A simple solution for taking attendance using facial recognition in Python.
 
 ## Description
 
-This project is intended to be used as 
+This project is intended to be used for tracking attendance for a classroom using facial recognition that updates student faces over time.
 
 # Technologies
 
